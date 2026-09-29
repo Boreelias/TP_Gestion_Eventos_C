@@ -6,6 +6,12 @@
 #define MAX_FIL 30
 #define MAX_COL 45
 
+typedef struct {
+    int fila;
+    int columna;
+    int disponibilidad;
+} tUbicacion;
+
 typedef struct
 {
     unsigned id;
@@ -14,7 +20,7 @@ typedef struct
     float precio;
     int filas;
     int columnas;
-    tUbicaion ubicaciones[MAX_FIL][MAX_COL]
+    tUbicacion ubicaciones[MAX_FIL][MAX_COL]
 }tSector;
 
 typedef struct
