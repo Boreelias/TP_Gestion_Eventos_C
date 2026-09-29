@@ -15,6 +15,16 @@ typedef struct
 
 typedef struct
 {
+    char idCompra[10];
+    int sector;
+    int fila;
+    int butaca;
+    float precio;
+    char estado[10];
+}tEntrada;
+
+typedef struct
+{
     unsigned id;
     char nombre[15];
     unsigned capacidad;
@@ -43,14 +53,14 @@ typedef struct
     tSector sectores[MAX_SECTORES];
 }tEstablecimiento;
 
-typedef struct
-{
-    char idCompra[10];
-    int sector;
-    int fila;
-    int butaca;
-    float precio;
-    char estado[10];
-}tEntrada;
+typedef struct {
+    char id[10];
+    char IdUsuario[9];
+    char IdEvento[10];
+    tEntrada Entradas[MAX_ENTRADAS_POR_COMPRA];
+    int cantEntradas;
+    float ImporteTotal;
+    unsigned long long fechaCompra;
+} tCompra;
 
 #endif // ESTRUCTURAS_H_INCLUDED
