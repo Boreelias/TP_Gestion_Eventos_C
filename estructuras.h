@@ -6,7 +6,8 @@
 #define MAX_FIL 30
 #define MAX_COL 45
 
-typedef struct {
+typedef struct
+{
     int fila;
     int columna;
     int disponibilidad;
@@ -41,5 +42,15 @@ typedef struct
     unsigned capacidadTotal;
     tSector sectores[MAX_SECTORES];
 }tEstablecimiento;
+
+typedef struct
+{
+    char idCompra[10];
+    int sector;
+    int fila;
+    int butaca;
+    float precio;
+    char estado[10];
+}tEntrada;
 
 #endif // ESTRUCTURAS_H_INCLUDED
