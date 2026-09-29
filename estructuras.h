@@ -3,6 +3,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MAX_SECTORES 15
+#define MAX_FIL 30
+#define MAX_COL 45
+
+typedef struct
+{
+    unsigned id;
+    char nombre[15];
+    unsigned capacidad;
+    float precio;
+    int filas;
+    int columnas;
+    tUbicaion ubicaciones[MAX_FIL][MAX_COL]
+}tSector;
 
 typedef struct
 {
@@ -20,7 +33,7 @@ typedef struct
     char nombre[30];
     char direccion[30];
     unsigned capacidadTotal;
-    tSector[MAX_SECTORES];
+    tSector sectores[MAX_SECTORES];
 }tEstablecimiento;
 
 #endif // ESTRUCTURAS_H_INCLUDED
