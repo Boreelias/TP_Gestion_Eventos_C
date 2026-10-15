@@ -1,6 +1,6 @@
 #ifndef ESTABLECIMIENTO_H_INCLUDED
 #define ESTABLECIMIENTO_H_INCLUDED
-
+#include "estructuras.h"
 
 
 #endif // ESTABLECIMIENTO_H_INCLUDED
