@@ -3,5 +3,6 @@
 #include "estructuras.h"
 
 int iniciarSistema(int *perfil, char *idUsuario);
+void ejecutarMenuUsuario(const char *idUser);
 
 #endif // USUARIO_H_INCLUDED

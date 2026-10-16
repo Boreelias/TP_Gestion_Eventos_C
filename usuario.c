@@ -1,10 +1,11 @@
 #include "usuario.h"
 #include "estructuras.h"
+#include "evento.h"
 
 
 int iniciarSistema(int *perfil, char *idUsuario)
 {
-
+    system("cls");
     printf("=======GESTOR DE EVENTOS=======\n");
     printf("Seleccione el perfil: \n");
     printf("1. ADMINISTRADOR.\n");
@@ -27,7 +28,7 @@ int iniciarSistema(int *perfil, char *idUsuario)
                     scanf("%s", buffer);
 
                     if(strlen(buffer) != 8)
-                        printf("ERROR: El ID debe tener exactamente 8 caracteres\nIngrese nuevamente: ");
+                        printf("ERROR: El ID debe tener exactamente 8 caracteres\n");
 
                 }while(strlen(buffer) != 8);
 
@@ -44,4 +45,33 @@ int iniciarSistema(int *perfil, char *idUsuario)
             printf("Opcion invalida!\nIntente nuevamente\n\n");
     }
     return 0;
+}
+
+void ejecutarMenuUsuario(const char *idUser)
+{
+    int opcionUser = 0;
+    system("cls");
+    do
+    {
+        printf("==================================================\n");
+        printf("             MENU USUARIO (ID: %s)                \n", idUser);
+        printf("==================================================\n");
+
+        printf("1. Consultar eventos disponibles.\n");
+        printf("0. Salir.\n");
+        printf("Opcion: ");
+        scanf("%d", &opcionUser);
+
+        switch(opcionUser)
+        {
+        case 1:
+            consultarEventosDisponibles();
+            break;
+        case 0:
+            printf("Cerrando sesion...");
+            break;
+        default:
+            printf("Numero ingresado incorrecto!\nIngrese nuevamente\n\n");
+        }
+    }while(opcionUser != 0);
 }
