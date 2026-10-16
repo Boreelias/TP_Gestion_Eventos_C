@@ -4,5 +4,6 @@
 
 void consultarEventosDisponibles();
 void buscarNombreEstablecimiento(unsigned idBuscado, char *nomEstablecimiento);
+void altaEvento();
 
 #endif // EVENTO_H_INCLUDED

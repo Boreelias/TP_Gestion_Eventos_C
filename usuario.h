@@ -4,5 +4,6 @@
 
 int iniciarSistema(int *perfil, char *idUsuario);
 void ejecutarMenuUsuario(const char *idUser);
+void ejecutarMenuAdministrador();
 
 #endif // USUARIO_H_INCLUDED

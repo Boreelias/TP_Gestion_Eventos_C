@@ -50,9 +50,9 @@ int iniciarSistema(int *perfil, char *idUsuario)
 void ejecutarMenuUsuario(const char *idUser)
 {
     int opcionUser = 0;
-    system("cls");
     do
     {
+        system("cls");
         printf("==================================================\n");
         printf("             MENU USUARIO (ID: %s)                \n", idUser);
         printf("==================================================\n");
@@ -74,4 +74,34 @@ void ejecutarMenuUsuario(const char *idUser)
             printf("Numero ingresado incorrecto!\nIngrese nuevamente\n\n");
         }
     }while(opcionUser != 0);
+}
+
+void ejecutarMenuAdministrador()
+{
+    int opcionAdmin = 0;
+    do
+    {
+        system("cls");
+        printf("==================================================\n");
+        printf("                MENU ADMINISTRADOR                \n");
+        printf("==================================================\n");
+
+        printf("1. Ingresar nuevo evento.\n");
+        printf("0. Salir\n");
+        printf("Opcion: ");
+        scanf("%d", &opcionAdmin);
+
+        switch(opcionAdmin)
+        {
+        case 1:
+            altaEvento();
+            break;
+        case 0:
+            printf("Cerrando sesion...");
+            break;
+        default:
+            printf("Numero ingresado incorrecto!\nIngrese nuevamente\n\n");
+            system("pause");
+        }
+    }while(opcionAdmin != 0);
 }
