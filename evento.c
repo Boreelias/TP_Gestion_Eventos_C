@@ -68,9 +68,11 @@ void consultarEventosDisponibles()
             printf("..........................................\n\n");
             hayEven = 1;
         }
+        fread(&eve, sizeof(tEvento), 1, archEve);
     }
 
     if(!hayEven)
         printf("No hay eventos disponobles!");
     fclose(archEve);
+    system("pause");
 }

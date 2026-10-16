@@ -14,6 +14,7 @@ int main()
             {
                 case 1: //MENU ADMINISTRADOR
                     printf("\n[ACA VA EL MENU DE ADMINISTRADOR]\n");
+                    system("pause");
                     break;
 
                 case 2: //MENU USUARIO
