@@ -2,9 +2,11 @@
 #define ESTRUCTURAS_H_INCLUDED
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define MAX_SECTORES 15
 #define MAX_FIL 30
 #define MAX_COL 45
+#define MAX_ENTRADAS_POR_COMPRA 5
 
 typedef struct
 {
@@ -31,7 +33,7 @@ typedef struct
     float precio;
     int filas;
     int columnas;
-    tUbicacion ubicaciones[MAX_FIL][MAX_COL]
+    tUbicacion ubicaciones[MAX_FIL][MAX_COL];
 }tSector;
 
 typedef struct
