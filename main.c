@@ -17,7 +17,7 @@ int main()
                     break;
 
                 case 2: //MENU USUARIO
-                    printf("\n[ACA VA EL MENU USUARIO]\n");
+                    ejecutarMenuUsuario(idUsuario);
                     break;
             }
         }
