@@ -13,8 +13,7 @@ int main()
             switch(perfil)
             {
                 case 1: //MENU ADMINISTRADOR
-                    printf("\n[ACA VA EL MENU DE ADMINISTRADOR]\n");
-                    system("pause");
+                    ejecutarMenuAdministrador();
                     break;
 
                 case 2: //MENU USUARIO

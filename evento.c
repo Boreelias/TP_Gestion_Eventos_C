@@ -76,3 +76,46 @@ void consultarEventosDisponibles()
     fclose(archEve);
     system("pause");
 }
+
+void altaEvento()
+{
+    FILE *archEve = fopen("Eventos.bin","ab");
+    if(archEve == NULL)
+    {
+        printf("No se pudo abrir el archivo!");
+        system("pause");
+        exit(-1);
+    }
+
+    tEvento eve;
+    system("cls");
+
+    printf("====================================================\n");
+    printf("                  REGISTRAR EVENTOS                 \n");
+    printf("====================================================\n");
+
+    printf("Ingrese el ID del evento: ");
+    scanf("%s", eve.id);
+
+    printf("Ingrese el nombre del evento: ");
+    scanf("%s", eve.nombre);
+
+    printf("Ingrese el tipo de evento: ");
+    scanf("%s", eve.tipoEvento);
+
+    printf("Ingrese el ID establecimiento: ");
+    scanf("%u", &eve.idEstablecimiento);
+
+    printf("Ingrese la fecha y hora: ");
+    scanf("%llu", &eve.fechaHora);
+
+    printf("Ingrese el estado del evento: ");
+    scanf("%d", &eve.estado);
+
+    fwrite(&eve, sizeof(tEvento),1,archEve);
+
+    fclose(archEve);
+
+    printf("\nEvento registrado!");
+    system("pause");
+}
