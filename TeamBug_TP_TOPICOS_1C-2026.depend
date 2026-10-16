@@ -6,3 +6,40 @@
 	<stdio.h>
 	<stdlib.h>
 
+1792076385 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\compra.c
+	"estructuras.h"
+	"compra.h"
+
+1792177597 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\estructuras.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1792076401 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\compra.h
+	"estructuras.h"
+
+1792076385 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.c
+	"estructuras.h"
+	"establecimiento.h"
+
+1792076401 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.h
+	"estructuras.h"
+
+1792076385 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.c
+	"estructuras.h"
+	"evento.h"
+
+1792076401 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.h
+	"estructuras.h"
+
+1792178039 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.c
+	"usuario.h"
+	"estructuras.h"
+
+1792177300 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.h
+	"estructuras.h"
+
+1792177811 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\main.c
+	"estructuras.h"
+	"usuario.h"
+
