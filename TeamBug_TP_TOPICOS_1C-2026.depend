@@ -18,29 +18,30 @@
 1792076401 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\compra.h
 	"estructuras.h"
 
-1792076385 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.c
+1792531777 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.c
 	"estructuras.h"
 	"establecimiento.h"
 
-1792076401 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.h
+1792531732 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.h
 	"estructuras.h"
 
-1792191122 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.c
+1792531744 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.c
 	"estructuras.h"
 	"evento.h"
+	"establecimiento.h"
 
-1792191460 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.h
+1792192262 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.h
 	"estructuras.h"
 
-1792192013 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.c
+1792192262 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.c
 	"usuario.h"
 	"estructuras.h"
 	"evento.h"
 
-1792191472 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.h
+1792192262 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.h
 	"estructuras.h"
 
-1792191551 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\main.c
+1792192262 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\main.c
 	"estructuras.h"
 	"usuario.h"
 

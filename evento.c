@@ -1,5 +1,34 @@
 #include "estructuras.h"
 #include "evento.h"
+#include "establecimiento.h"
+
+int existeEvento(const char *idBuscado)
+{
+    tEvento eve;
+    int contador = 0;
+
+    FILE *archEve = fopen("Eventos.bin","rb");
+    if(archEve == NULL)
+    {
+        printf("No se pudo abrir el archivo Eventos.bin\n");
+        system("pause");
+        exit(-1);
+    }
+
+    fread(&eve, sizeof(tEvento),1,archEve);
+    while(!feof(archEve))
+    {
+        if(strcmpi(eve.id, idBuscado) == 0)
+        {
+            contador = 1;
+            return contador;
+        }
+
+        fread(&eve, sizeof(tEvento),1,archEve);
+    }
+
+    return contador;
+}
 
 void buscarNombreEstablecimiento(unsigned idBuscado, char *nomEstablecimiento)
 {
@@ -79,6 +108,8 @@ void consultarEventosDisponibles()
 
 void altaEvento()
 {
+    char exceso[50];
+
     FILE *archEve = fopen("Eventos.bin","ab");
     if(archEve == NULL)
     {
@@ -95,7 +126,21 @@ void altaEvento()
     printf("====================================================\n");
 
     printf("Ingrese el ID del evento: ");
-    scanf("%s", eve.id);
+    scanf("%s", exceso);
+    if((strlen(exceso) != 10)
+    {
+        printf("El ID %s se va de los limites\n", exceso);
+        system("pause");
+        return;
+    }
+    strcpy(eve.id, exceso);
+
+    if(existeEvento(eve.id))
+    {
+        printf("El evento %s ya existe!\n", eve.id);
+        system("pause");
+        return;
+    }
 
     printf("Ingrese el nombre del evento: ");
     scanf("%s", eve.nombre);
@@ -105,6 +150,13 @@ void altaEvento()
 
     printf("Ingrese el ID establecimiento: ");
     scanf("%u", &eve.idEstablecimiento);
+
+    if(!existeEstablecimiento(eve.idEstablecimiento))
+    {
+        printf("ERROR!\nEl establecimiento con el ID %d no existe en el sistema.\nDebe registrar el establecimiento previamente\n", eve.idEstablecimiento);
+        system("pause");
+        return;
+    }
 
     printf("Ingrese la fecha y hora: ");
     scanf("%llu", &eve.fechaHora);
