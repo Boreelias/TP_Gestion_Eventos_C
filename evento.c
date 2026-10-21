@@ -108,7 +108,7 @@ void consultarEventosDisponibles()
 
 void altaEvento()
 {
-    char exceso[50];
+    char exceso[100];
 
     FILE *archEve = fopen("Eventos.bin","ab");
     if(archEve == NULL)
@@ -127,7 +127,7 @@ void altaEvento()
 
     printf("Ingrese el ID del evento: ");
     scanf("%s", exceso);
-    if((strlen(exceso) != 10)
+    if(strlen(exceso) != 10)
     {
         printf("El ID %s se va de los limites\n", exceso);
         system("pause");
@@ -143,10 +143,25 @@ void altaEvento()
     }
 
     printf("Ingrese el nombre del evento: ");
-    scanf("%s", eve.nombre);
+    scanf("%s", exceso);
+    if(strlen(exceso) > 30)
+    {
+        printf("El nombre %s se va de los limites\n", exceso);
+        system("pause");
+        return;
+    }
+    strcpy(eve.nombre, exceso);
 
     printf("Ingrese el tipo de evento: ");
-    scanf("%s", eve.tipoEvento);
+    scanf("%s", exceso);
+    if(strlen(exceso) > 50)
+    {
+        printf("El tipo de evento %s se va de los limites\n", exceso);
+        system("pause");
+        return;
+    }
+    strcpy(eve.tipoEvento, exceso);
+
 
     printf("Ingrese el ID establecimiento: ");
     scanf("%u", &eve.idEstablecimiento);
@@ -159,7 +174,21 @@ void altaEvento()
     }
 
     printf("Ingrese la fecha y hora: ");
-    scanf("%llu", &eve.fechaHora);
+    int leido = scanf("%llu", &eve.fechaHora);
+
+    if(leido != 1)
+    {
+        printf("Error!\nLa fecha esta mal ingresada\n");
+        system("pause");
+        return;
+    }
+
+    if(!validarFecha(eve.fechaHora))
+    {
+        printf("ERROR!\La fecha %llu no es valida\n", eve.fechaHora);
+        system("pause");
+        return;
+    }
 
     printf("Ingrese el estado del evento: ");
     scanf("%d", &eve.estado);
