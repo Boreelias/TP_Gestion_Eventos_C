@@ -27,11 +27,15 @@ int existeEvento(const char *idBuscado)
         fread(&eve, sizeof(tEvento),1,archEve);
     }
 
+    fclose(archEve);
     return contador;
 }
 
 void buscarNombreEstablecimiento(unsigned idBuscado, char *nomEstablecimiento)
 {
+    tEstablecimiento est;
+    int encontrado = 0;
+
     FILE *archEst = fopen("Establecimientos.bin","rb");
     if(archEst == NULL)
     {
@@ -40,9 +44,6 @@ void buscarNombreEstablecimiento(unsigned idBuscado, char *nomEstablecimiento)
         exit(-1);
         strcpy(nomEstablecimiento, "Desconocido");
     }
-
-    tEstablecimiento est;
-    int encontrado = 0;
 
         fread(&est, sizeof(tEstablecimiento),1,archEst);
         while(!feof(archEst) && !encontrado)
@@ -64,6 +65,9 @@ void buscarNombreEstablecimiento(unsigned idBuscado, char *nomEstablecimiento)
 
 void consultarEventosDisponibles()
 {
+    tEvento eve;
+    int hayEven = 0;
+
     FILE *archEve = fopen("Eventos.bin","rb");
     if(archEve == NULL)
     {
@@ -71,10 +75,6 @@ void consultarEventosDisponibles()
         system("pause");
         exit(-1);
     }
-
-    tEvento eve;
-
-    int hayEven = 0;
 
     system("cls");
     printf("====================================================\n");
@@ -109,6 +109,8 @@ void consultarEventosDisponibles()
 void altaEvento()
 {
     char exceso[100];
+    tEvento eve;
+    int leido = 0;
 
     FILE *archEve = fopen("Eventos.bin","ab");
     if(archEve == NULL)
@@ -118,7 +120,6 @@ void altaEvento()
         exit(-1);
     }
 
-    tEvento eve;
     system("cls");
 
     printf("====================================================\n");
@@ -174,7 +175,7 @@ void altaEvento()
     }
 
     printf("Ingrese la fecha y hora: ");
-    int leido = scanf("%llu", &eve.fechaHora);
+    leido = scanf("%llu", &eve.fechaHora);
 
     if(leido != 1)
     {
@@ -185,7 +186,7 @@ void altaEvento()
 
     if(!validarFecha(eve.fechaHora))
     {
-        printf("ERROR!\La fecha %llu no es valida\n", eve.fechaHora);
+        printf("ERROR!\nLa fecha %llu no es valida\n", eve.fechaHora);
         system("pause");
         return;
     }

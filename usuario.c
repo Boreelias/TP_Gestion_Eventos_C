@@ -5,6 +5,7 @@
 
 int iniciarSistema(int *perfil, char *idUsuario)
 {
+    char buffer[50];
     system("cls");
     printf("=======GESTOR DE EVENTOS=======\n");
     printf("Seleccione el perfil: \n");
@@ -21,7 +22,6 @@ int iniciarSistema(int *perfil, char *idUsuario)
             return 1;
 
         case 2: printf("\n-----Sesion iniciada como USUARIO-----\n");
-            char buffer[50];
                 do
                 {
                     printf("Ingrese el ID del usuario: ");
