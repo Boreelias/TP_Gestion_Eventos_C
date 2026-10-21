@@ -45,3 +45,72 @@
 	"estructuras.h"
 	"usuario.h"
 
+1792603203 source:c:\users\nikkito\documents\tp_gestion_eventos_c\compra.c
+	"estructuras.h"
+	"compra.h"
+
+1792603203 c:\users\nikkito\documents\tp_gestion_eventos_c\estructuras.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1792603203 c:\users\nikkito\documents\tp_gestion_eventos_c\compra.h
+	"estructuras.h"
+
+1792608903 source:c:\users\nikkito\documents\tp_gestion_eventos_c\establecimiento.c
+	"estructuras.h"
+	"establecimiento.h"
+	"evento.h"
+	"util.h"
+
+1792606991 c:\users\nikkito\documents\tp_gestion_eventos_c\establecimiento.h
+	"estructuras.h"
+
+1792608990 source:c:\users\nikkito\documents\tp_gestion_eventos_c\main.c
+	"estructuras.h"
+	"usuario.h"
+	"util.h"
+
+1792604877 c:\users\nikkito\documents\tp_gestion_eventos_c\usuario.h
+
+1792608963 source:c:\users\nikkito\documents\tp_gestion_eventos_c\usuario.c
+	"usuario.h"
+	"estructuras.h"
+	"evento.h"
+	"establecimiento.h"
+	"ubicacion.h"
+	"util.h"
+
+1792608835 c:\users\nikkito\documents\tp_gestion_eventos_c\evento.h
+	"estructuras.h"
+
+1792608879 source:c:\users\nikkito\documents\tp_gestion_eventos_c\evento.c
+	"estructuras.h"
+	"evento.h"
+	"establecimiento.h"
+	"fecha.h"
+	"util.h"
+
+1792605288 c:\users\nikkito\documents\tp_gestion_eventos_c\fecha.h
+	<stdio.h>
+	<time.h>
+
+1792605315 source:c:\users\nikkito\documents\tp_gestion_eventos_c\fecha.c
+	"fecha.h"
+	<ctype.h>
+
+1792608818 c:\users\nikkito\documents\tp_gestion_eventos_c\util.h
+
+1792608931 source:c:\users\nikkito\documents\tp_gestion_eventos_c\ubicacion.c
+	"ubicacion.h"
+	"evento.h"
+	"establecimiento.h"
+	"util.h"
+
+1792608051 c:\users\nikkito\documents\tp_gestion_eventos_c\ubicacion.h
+	"estructuras.h"
+
+1792608825 source:c:\users\nikkito\documents\tp_gestion_eventos_c\util.c
+	<stdio.h>
+	"util.h"
+

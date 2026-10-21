@@ -1,203 +1,296 @@
 #include "estructuras.h"
 #include "evento.h"
 #include "establecimiento.h"
+#include "fecha.h"
+#include "util.h"
 
 int existeEvento(const char *idBuscado)
 {
     tEvento eve;
-    int contador = 0;
+    int encontrado = 0;
+    FILE *archEve = fopen("Eventos.bin", "rb");
 
-    FILE *archEve = fopen("Eventos.bin","rb");
     if(archEve == NULL)
-    {
-        printf("No se pudo abrir el archivo Eventos.bin\n");
-        system("pause");
-        exit(-1);
-    }
+        return 0;
 
-    fread(&eve, sizeof(tEvento),1,archEve);
-    while(!feof(archEve))
+    while(!encontrado && fread(&eve, sizeof(tEvento), 1, archEve) == 1)
     {
-        if(strcmpi(eve.id, idBuscado) == 0)
-        {
-            contador = 1;
-            return contador;
-        }
-
-        fread(&eve, sizeof(tEvento),1,archEve);
+        if(strcmp(eve.id, idBuscado) == 0)
+            encontrado = 1;
     }
 
     fclose(archEve);
-    return contador;
+    return encontrado;
 }
 
-void buscarNombreEstablecimiento(unsigned idBuscado, char *nomEstablecimiento)
-{
-    tEstablecimiento est;
-    int encontrado = 0;
-
-    FILE *archEst = fopen("Establecimientos.bin","rb");
-    if(archEst == NULL)
-    {
-        printf("Fallo la apertura del archivo!");
-        system("pause");
-        exit(-1);
-        strcpy(nomEstablecimiento, "Desconocido");
-    }
-
-        fread(&est, sizeof(tEstablecimiento),1,archEst);
-        while(!feof(archEst) && !encontrado)
-        {
-            if(est.id == idBuscado)
-            {
-                strcpy(nomEstablecimiento, est.nombre);
-                encontrado = 1;
-            }
-            else
-                fread(&est, sizeof(tEstablecimiento),1,archEst);
-        }
-
-        if(!encontrado)
-            strcpy(nomEstablecimiento, "No encontrado");
-
-        fclose(archEst);
-}
-
-void consultarEventosDisponibles()
+int obtenerEventoPorId(const char *idBuscado, tEvento *eveDestino)
 {
     tEvento eve;
-    int hayEven = 0;
+    int encontrado = 0;
+    FILE *archEve = fopen("Eventos.bin", "rb");
 
-    FILE *archEve = fopen("Eventos.bin","rb");
     if(archEve == NULL)
+        return 0;
+
+    while(!encontrado && fread(&eve, sizeof(tEvento), 1, archEve) == 1)
     {
-        printf("No se pudo abrir el archivo!");
-        system("pause");
-        exit(-1);
+        if(strcmp(eve.id, idBuscado) == 0)
+        {
+            *eveDestino = eve;
+            encontrado = 1;
+        }
     }
 
-    system("cls");
+    fclose(archEve);
+    return encontrado;
+}
+
+int insertarEventoOrdenado(const tEvento *nuevo)
+{
+    tEvento actual;
+    int insertado = 0;
+    FILE *archOrig;
+    FILE *archTemp;
+
+    archOrig = fopen("Eventos.bin", "rb");
+    archTemp = fopen("Eventos.tmp", "wb");
+
+    if(archTemp == NULL)
+    {
+        if(archOrig != NULL)
+            fclose(archOrig);
+        return 0;
+    }
+
+    if(archOrig == NULL)
+    {
+        /* Si el archivo original no existe, simplemente escribimos el nuevo */
+        if(fwrite(nuevo, sizeof(tEvento), 1, archTemp) != 1)
+        {
+            fclose(archTemp);
+            remove("Eventos.tmp");
+            return 0;
+        }
+        fclose(archTemp);
+        rename("Eventos.tmp", "Eventos.bin");
+        return 1;
+    }
+
+    /* Intercalacion ordenada por ID */
+    while(fread(&actual, sizeof(tEvento), 1, archOrig) == 1)
+    {
+        if(!insertado && strcmp(nuevo->id, actual.id) < 0)
+        {
+            fwrite(nuevo, sizeof(tEvento), 1, archTemp);
+            insertado = 1;
+        }
+        fwrite(&actual, sizeof(tEvento), 1, archTemp);
+    }
+
+    if(!insertado)
+    {
+        fwrite(nuevo, sizeof(tEvento), 1, archTemp);
+    }
+
+    fclose(archOrig);
+    fclose(archTemp);
+
+    remove("Eventos.bin");
+    rename("Eventos.tmp", "Eventos.bin");
+
+    return 1;
+}
+
+void consultarEventosDisponibles(void)
+{
+    tEvento eve;
+    int hayEventos = 0;
+    char strFecha[15];
+    char strHora[10];
+    char nombreEst[30];
+    FILE *archEve = fopen("Eventos.bin", "rb");
+
+    limpiarPantalla();
     printf("====================================================\n");
     printf("                 EVENTOS DISPONIBLES                \n");
     printf("====================================================\n");
 
-    fread(&eve, sizeof(tEvento),1,archEve);
-    while(!feof(archEve))
+    if(archEve == NULL)
+    {
+        printf("No hay eventos registrados en el sistema.\n\n");
+        pausar();
+        return;
+    }
+
+    while(fread(&eve, sizeof(tEvento), 1, archEve) == 1)
     {
         if(eve.estado == 1)
         {
-            char nombreEst[30];
             buscarNombreEstablecimiento(eve.idEstablecimiento, nombreEst);
+            formatearFecha(eve.fechaHora, strFecha);
+            formatearHora(eve.fechaHora, strHora);
 
-            printf("Identificador: %s\n", eve.id);
-            printf("Nombre: %s\n", eve.nombre);
-            printf("Tipo de evento: %s\n", eve.tipoEvento);
-            printf("Fecha/hora: %llu\n", eve.fechaHora);
-            printf("Establecimiento: %s\n", nombreEst);
-            printf("..........................................\n\n");
-            hayEven = 1;
+            printf("Identificador   : %s\n", eve.id);
+            printf("Nombre          : %s\n", eve.nombre);
+            printf("Tipo de evento  : %s\n", eve.tipoEvento);
+            printf("Fecha           : %s\n", strFecha);
+            printf("Hora            : %s\n", strHora);
+            printf("Establecimiento : %s\n", nombreEst);
+            printf("----------------------------------------------------\n");
+            hayEventos = 1;
         }
-        fread(&eve, sizeof(tEvento), 1, archEve);
     }
 
-    if(!hayEven)
-        printf("No hay eventos disponobles!");
+    if(!hayEventos)
+        printf("No hay eventos disponibles para la venta en este momento.\n");
+
     fclose(archEve);
-    system("pause");
+    printf("\n");
+    pausar();
 }
 
-void altaEvento()
+void altaEvento(void)
 {
-    char exceso[100];
     tEvento eve;
-    int leido = 0;
+    char idTemp[50];
+    char nomTemp[50];
+    char tipoTemp[50];
+    char fechaStr[50];
+    char horaStr[50];
+    int dia, mes, anio, hora, min;
 
-    FILE *archEve = fopen("Eventos.bin","ab");
-    if(archEve == NULL)
-    {
-        printf("No se pudo abrir el archivo!");
-        system("pause");
-        exit(-1);
-    }
-
-    system("cls");
-
+    limpiarPantalla();
     printf("====================================================\n");
-    printf("                  REGISTRAR EVENTOS                 \n");
+    printf("                  REGISTRAR EVENTO                  \n");
     printf("====================================================\n");
 
-    printf("Ingrese el ID del evento: ");
-    scanf("%s", exceso);
-    if(strlen(exceso) != 10)
+    /* 1. Ingreso y validacion de ID (maximo 9 caracteres + '\0') */
+    printf("Ingrese el ID del evento (max 9 caracteres): ");
+    if(scanf("%49s", idTemp) != 1)
     {
-        printf("El ID %s se va de los limites\n", exceso);
-        system("pause");
+        vaciarBufferTeclado();
+        printf("Error en la lectura del ID.\n");
+        pausar();
         return;
     }
-    strcpy(eve.id, exceso);
+    vaciarBufferTeclado();
 
-    if(existeEvento(eve.id))
+    if(strlen(idTemp) > 9)
     {
-        printf("El evento %s ya existe!\n", eve.id);
-        system("pause");
+        printf("ERROR: El ID supera el limite permitido (max 9 caracteres).\n");
+        pausar();
         return;
     }
 
-    printf("Ingrese el nombre del evento: ");
-    scanf("%s", exceso);
-    if(strlen(exceso) > 30)
+    if(existeEvento(idTemp))
     {
-        printf("El nombre %s se va de los limites\n", exceso);
-        system("pause");
+        printf("ERROR: El evento con ID '%s' ya existe.\n", idTemp);
+        pausar();
         return;
     }
-    strcpy(eve.nombre, exceso);
+    strcpy(eve.id, idTemp);
 
-    printf("Ingrese el tipo de evento: ");
-    scanf("%s", exceso);
-    if(strlen(exceso) > 50)
+    /* 2. Ingreso de Nombre */
+    printf("Ingrese el nombre del evento (max 29 caracteres): ");
+    if(scanf(" %29[^\n]", nomTemp) != 1)
     {
-        printf("El tipo de evento %s se va de los limites\n", exceso);
-        system("pause");
+        vaciarBufferTeclado();
+        printf("Error en la lectura del nombre.\n");
+        pausar();
         return;
     }
-    strcpy(eve.tipoEvento, exceso);
+    vaciarBufferTeclado();
+    strcpy(eve.nombre, nomTemp);
 
+    /* 3. Ingreso de Tipo de Evento */
+    printf("Ingrese el tipo de evento (recital, teatro, etc. max 29 caracteres): ");
+    if(scanf(" %29[^\n]", tipoTemp) != 1)
+    {
+        vaciarBufferTeclado();
+        printf("Error en la lectura del tipo de evento.\n");
+        pausar();
+        return;
+    }
+    vaciarBufferTeclado();
+    strcpy(eve.tipoEvento, tipoTemp);
 
-    printf("Ingrese el ID establecimiento: ");
-    scanf("%u", &eve.idEstablecimiento);
+    /* 4. Ingreso de Establecimiento */
+    printf("Ingrese el ID del establecimiento: ");
+    if(scanf("%u", &eve.idEstablecimiento) != 1)
+    {
+        vaciarBufferTeclado();
+        printf("ERROR: Debe ingresar un valor numerico.\n");
+        pausar();
+        return;
+    }
+    vaciarBufferTeclado();
 
     if(!existeEstablecimiento(eve.idEstablecimiento))
     {
-        printf("ERROR!\nEl establecimiento con el ID %d no existe en el sistema.\nDebe registrar el establecimiento previamente\n", eve.idEstablecimiento);
-        system("pause");
+        printf("ERROR: El establecimiento con ID %u no existe en el sistema.\n", eve.idEstablecimiento);
+        printf("Debe registrar el establecimiento previamente.\n");
+        pausar();
         return;
     }
 
-    printf("Ingrese la fecha y hora: ");
-    leido = scanf("%llu", &eve.fechaHora);
-
-    if(leido != 1)
+    /* 5. Ingreso y validacion de Fecha y Hora tolerante a formatos */
+    printf("Ingrese la fecha (ej: DD/MM/AAAA o DDMMAAAA): ");
+    if(scanf("%49s", fechaStr) != 1)
     {
-        printf("Error!\nLa fecha esta mal ingresada\n");
-        system("pause");
+        vaciarBufferTeclado();
+        printf("ERROR: Lectura de fecha invalida.\n");
+        pausar();
         return;
     }
+    vaciarBufferTeclado();
 
-    if(!validarFecha(eve.fechaHora))
+    if(!parsearFechaCadena(fechaStr, &dia, &mes, &anio))
     {
-        printf("ERROR!\nLa fecha %llu no es valida\n", eve.fechaHora);
-        system("pause");
+        printf("ERROR: Formato de fecha invalido. Use DD/MM/AAAA o DDMMAAAA.\n");
+        pausar();
         return;
     }
 
-    printf("Ingrese el estado del evento: ");
-    scanf("%d", &eve.estado);
+    printf("Ingrese la hora (ej: HH:MM o HHMM): ");
+    if(scanf("%49s", horaStr) != 1)
+    {
+        vaciarBufferTeclado();
+        printf("ERROR: Lectura de hora invalida.\n");
+        pausar();
+        return;
+    }
+    vaciarBufferTeclado();
 
-    fwrite(&eve, sizeof(tEvento),1,archEve);
+    if(!parsearHoraCadena(horaStr, &hora, &min))
+    {
+        printf("ERROR: Formato de hora invalido. Use HH:MM o HHMM.\n");
+        pausar();
+        return;
+    }
 
-    fclose(archEve);
+    if(!esFechaValida(dia, mes, anio, hora, min))
+    {
+        printf("ERROR: La fecha y hora ingresada (%02d/%02d/%04d %02d:%02d) no es valida en el calendario.\n", dia, mes, anio, hora, min);
+        pausar();
+        return;
+    }
 
-    printf("\nEvento registrado!");
-    system("pause");
+    eve.fechaHora = convertirFechaATimestamp(dia, mes, anio, hora, min);
+
+    /* 6. Estado inicial: 1 = Disponible por defecto */
+    eve.estado = 1;
+
+    /* 7. Insercion ordenada por ID en el archivo */
+    if(insertarEventoOrdenado(&eve))
+    {
+        printf("\n====================================================\n");
+        printf("           EVENTO REGISTRADO EXITOSAMENTE           \n");
+        printf("====================================================\n");
+    }
+    else
+    {
+        printf("ERROR: No se pudo guardar el evento en el archivo.\n");
+    }
+
+    pausar();
 }
