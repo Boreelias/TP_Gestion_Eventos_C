@@ -44,13 +44,25 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="evento.h" />
+		<Unit filename="fecha.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="fecha.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="ubicacion.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ubicacion.h" />
 		<Unit filename="usuario.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="usuario.h" />
+		<Unit filename="util.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="util.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

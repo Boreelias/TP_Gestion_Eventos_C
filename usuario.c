@@ -1,50 +1,76 @@
 #include "usuario.h"
 #include "estructuras.h"
 #include "evento.h"
-
+#include "establecimiento.h"
+#include "ubicacion.h"
+#include "util.h"
 
 int iniciarSistema(int *perfil, char *idUsuario)
 {
     char buffer[50];
-    system("cls");
-    printf("=======GESTOR DE EVENTOS=======\n");
-    printf("Seleccione el perfil: \n");
-    printf("1. ADMINISTRADOR.\n");
-    printf("2. USUARIO.\n");
-    printf("0. SALIR.\n");
-    printf("OPCION: ");
-    scanf("%d", perfil);
+    int opcion = -1;
 
-    system("cls");
+    limpiarPantalla();
+    printf("==================================================\n");
+    printf("                GESTOR DE EVENTOS                 \n");
+    printf("==================================================\n");
+    printf("Seleccione el perfil:\n");
+    printf("1. ADMINISTRADOR\n");
+    printf("2. USUARIO\n");
+    printf("0. SALIR\n");
+    printf("--------------------------------------------------\n");
+    printf("OPCION: ");
+
+    if(scanf("%d", &opcion) != 1)
+    {
+        vaciarBufferTeclado();
+        printf("\nOpcion invalida!\n");
+        pausar();
+        return 0;
+    }
+    vaciarBufferTeclado();
+
+    *perfil = opcion;
+    limpiarPantalla();
+
     switch(*perfil)
     {
-        case 1: printf("\n-----Sesion iniciada como ADMINISTRADOR-----");
+        case 1:
+            printf("\n----- Sesion iniciada como ADMINISTRADOR -----\n\n");
+            pausar();
             return 1;
 
-        case 2: printf("\n-----Sesion iniciada como USUARIO-----\n");
-                do
+        case 2:
+            printf("\n----- Sesion iniciada como USUARIO -----\n");
+            do
+            {
+                printf("Ingrese su ID de usuario (exactamente 8 caracteres): ");
+                scanf("%49s", buffer);
+                vaciarBufferTeclado();
+
+                if(strlen(buffer) != 8)
                 {
-                    printf("Ingrese el ID del usuario: ");
-                    scanf("%s", buffer);
-
-                    if(strlen(buffer) != 8)
-                        printf("ERROR: El ID debe tener exactamente 8 caracteres\n");
-
-                }while(strlen(buffer) != 8);
+                    printf("ERROR: El ID de usuario debe tener exactamente 8 caracteres.\n\n");
+                }
+            } while(strlen(buffer) != 8);
 
             strcpy(idUsuario, buffer);
-            system("cls");
-            printf("========BIENVENIDO========\n");
-            printf("Sesion iniciada como: %s", idUsuario);
+            limpiarPantalla();
+            printf("==================================================\n");
+            printf("                   BIENVENIDO                     \n");
+            printf("==================================================\n");
+            printf("Sesion iniciada como: %s\n\n", idUsuario);
+            pausar();
             return 1;
 
         case 0:
             return 0;
 
         default:
-            printf("Opcion invalida!\nIntente nuevamente\n\n");
+            printf("Opcion invalida! Intente nuevamente.\n\n");
+            pausar();
+            return 0;
     }
-    return 0;
 }
 
 void ejecutarMenuUsuario(const char *idUser)
@@ -52,56 +78,83 @@ void ejecutarMenuUsuario(const char *idUser)
     int opcionUser = 0;
     do
     {
-        system("cls");
+        limpiarPantalla();
         printf("==================================================\n");
         printf("             MENU USUARIO (ID: %s)                \n", idUser);
         printf("==================================================\n");
-
         printf("1. Consultar eventos disponibles.\n");
-        printf("0. Salir.\n");
+        printf("2. Consultar establecimiento de un evento.\n");
+        printf("3. Consultar ubicaciones y disponibilidad de un sector.\n");
+        printf("0. Cerrar sesion.\n");
+        printf("--------------------------------------------------\n");
         printf("Opcion: ");
-        scanf("%d", &opcionUser);
+
+        if(scanf("%d", &opcionUser) != 1)
+        {
+            vaciarBufferTeclado();
+            opcionUser = -1;
+            continue;
+        }
+        vaciarBufferTeclado();
 
         switch(opcionUser)
         {
-        case 1:
-            consultarEventosDisponibles();
-            break;
-        case 0:
-            printf("Cerrando sesion...");
-            break;
-        default:
-            printf("Numero ingresado incorrecto!\nIngrese nuevamente\n\n");
+            case 1:
+                consultarEventosDisponibles();
+                break;
+            case 2:
+                consultarEstablecimiento();
+                break;
+            case 3:
+                consultarUbicacionesYDisponibilidad();
+                break;
+            case 0:
+                printf("\nCerrando sesion...\n");
+                break;
+            default:
+                printf("\nNumero ingresado incorrecto! Ingrese nuevamente.\n\n");
+                pausar();
         }
-    }while(opcionUser != 0);
+    } while(opcionUser != 0);
 }
 
-void ejecutarMenuAdministrador()
+void ejecutarMenuAdministrador(void)
 {
     int opcionAdmin = 0;
     do
     {
-        system("cls");
+        limpiarPantalla();
         printf("==================================================\n");
         printf("                MENU ADMINISTRADOR                \n");
         printf("==================================================\n");
-
-        printf("1. Ingresar nuevo evento.\n");
-        printf("0. Salir\n");
+        printf("1. Registrar nuevo evento (Alta).\n");
+        printf("2. Consultar establecimiento de un evento.\n");
+        printf("0. Cerrar sesion.\n");
+        printf("--------------------------------------------------\n");
         printf("Opcion: ");
-        scanf("%d", &opcionAdmin);
+
+        if(scanf("%d", &opcionAdmin) != 1)
+        {
+            vaciarBufferTeclado();
+            opcionAdmin = -1;
+            continue;
+        }
+        vaciarBufferTeclado();
 
         switch(opcionAdmin)
         {
-        case 1:
-            altaEvento();
-            break;
-        case 0:
-            printf("Cerrando sesion...");
-            break;
-        default:
-            printf("Numero ingresado incorrecto!\nIngrese nuevamente\n\n");
-            system("pause");
+            case 1:
+                altaEvento();
+                break;
+            case 2:
+                consultarEstablecimiento();
+                break;
+            case 0:
+                printf("\nCerrando sesion...\n");
+                break;
+            default:
+                printf("\nNumero ingresado incorrecto! Ingrese nuevamente.\n\n");
+                pausar();
         }
-    }while(opcionAdmin != 0);
+    } while(opcionAdmin != 0);
 }
