@@ -120,6 +120,7 @@ void ejecutarMenuUsuario(const char *idUser)
                 break;
             case 6:
                 cancelarEntradasUsuario(idUser);
+                break;
             case 0:
                 printf("\nCerrando sesion...\n");
                 break;
@@ -142,6 +143,10 @@ void ejecutarMenuAdministrador(void)
         printf("1. Registrar nuevo evento (Alta).\n");
         printf("2. Consultar establecimiento de un evento.\n");
         printf("3. Modificar estado del evento.\n");
+        printf("4. Consultar ventas de un evento.\n");
+        printf("5. Busqueda eficiente de eventos.\n");
+        printf("6. Conteo de entradas por criterio.\n");
+        printf("7. Reporte de ocupacion de un evento.\n");
         printf("0. Cerrar sesion.\n");
         printf("--------------------------------------------------\n");
         printf("Opcion: ");
@@ -164,6 +169,19 @@ void ejecutarMenuAdministrador(void)
                 break;
             case 3:
                 modificarEstadoEvento();
+                break;
+            case 4:
+                consultarVentasEvento();
+                break;
+            case 5:
+                busquedaEficienteEvento();
+                break;
+            case 6:
+                conteoEntradasCriterio();
+                break;
+            case 7:
+                reporteOcupacionEvento();
+                break;
             case 0:
                 printf("\nCerrando sesion...\n");
                 break;

@@ -573,7 +573,7 @@ void cancelarEntradasUsuario(const char *idUsuario)
     if(diferenciaTiempo <= 172800)
     {
         printf("ERROR: No es posible cancelar la compra.\n");
-        printf("La cancelacion debe realizarse con mas de 48 horas de anticipacion al evento[cite: 3].\n");
+        printf("La cancelacion debe realizarse con mas de 48 horas de anticipacion al evento.\n");
         pausar();
         return;
     }
@@ -623,7 +623,7 @@ void cancelarEntradasUsuario(const char *idUsuario)
     if(encontradaEnt)
     {
         printf("\n¡COMPRA Y ENTRADAS CANCELADAS EXITOSAMENTE!\n");
-        printf("Las ubicaciones asociadas han vuelto a estar disponibles[cite: 3].\n");
+        printf("Las ubicaciones asociadas han vuelto a estar disponibles.\n");
     }
     else
     {
@@ -653,7 +653,7 @@ void actualizarEntradasDeEvento(const char *idEvento, int nuevoEstado)
         return;
     }
 
-    estadoNuevo = (nuevoEstado == 2) ? "CANCELADA" : "FINALIZADA";
+    estadoNuevo = (nuevoEstado == -1) ? "CANCELADA" : "FINALIZADA";
 
     while(fread(&entrada, sizeof(tEntrada), 1, archEnt) == 1)
     {

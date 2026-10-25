@@ -51,7 +51,7 @@ int parsearFechaCadena(const char *cadena, int *dia, int *mes, int *anio)
     }
 
     /* Intentar leer formato continuo: DDMMAAAA (8 digitos seguidos) */
-    if(sscanf(cadena, "%8d", &d) == 1 && (int)cadena[8] == '\0')
+    if(sscanf(cadena, "%8d", &d) == 1 && (int)*(cadena + 8) == '\0')
     {
         /* Si puso e.g. 25102026: d = 25102026 */
         if(d >= 1011970) /* minimo 01/01/1970 -> 1011970 */
@@ -88,7 +88,7 @@ int parsearHoraCadena(const char *cadena, int *hora, int *min)
     }
 
     /* Formato continuo: HHMM (4 digitos seguidos) */
-    if(sscanf(cadena, "%4d", &h) == 1 && (int)cadena[4] == '\0')
+    if(sscanf(cadena, "%4d", &h) == 1 && (int)*(cadena + 4) == '\0')
     {
         m = h % 100;
         h /= 100;

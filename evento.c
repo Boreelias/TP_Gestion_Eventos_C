@@ -1,3 +1,4 @@
+#include "ubicacion.h"
 #include "estructuras.h"
 #include "evento.h"
 #include "establecimiento.h"
@@ -358,7 +359,7 @@ void modificarEstadoEvento(void)
     }
 
     printf("\nEvento Encontrado : %s (%s)\n", eve.nombre, eve.id);
-    printf("Estado Actual     : %d (1: Disponible, 2: Cancelado, 3: Finalizado)\n", eve.estado);
+    if(eve.estado == 1) printf("Estado Actual     : Disponible (1)\n"); else if(eve.estado == -1) printf("Estado Actual     : Cancelado (-1)\n"); else printf("Estado Actual     : Finalizado (2)\n");
     printf("----------------------------------------------------\n");
 
     nuevoEstado = pedirNuevoEstado();
@@ -380,5 +381,394 @@ void modificarEstadoEvento(void)
     }
 
     printf("\n¡ESTADO DEL EVENTO ACTUALIZADO EXITOSAMENTE!\n");
+    pausar();
+}
+
+
+
+
+void consultarVentasEvento(void)
+{
+    char idEvento[50];
+    tEvento eve;
+    FILE *archComp;
+    tCompra comp;
+    int entradasVendidas;
+    int entradasCanceladas;
+    float recaudacionVigente;
+    int i;
+    const tEntrada *pEntrada;
+
+    entradasVendidas = 0;
+    entradasCanceladas = 0;
+    recaudacionVigente = 0.0f;
+
+    limpiarPantalla();
+    printf("====================================================\n");
+    printf("                 CONSULTA DE VENTAS                 \n");
+    printf("====================================================\n");
+
+    printf("Ingrese el ID del evento a consultar: ");
+    if(scanf("%49s", idEvento) != 1)
+    {
+        vaciarBufferTeclado();
+        pausar();
+        return;
+    }
+    vaciarBufferTeclado();
+
+    if(!obtenerEventoPorId(idEvento, &eve))
+    {
+        printf("ERROR: No se encontro el evento con ID '%s'.\n", idEvento);
+        pausar();
+        return;
+    }
+
+    archComp = fopen("Compras.bin", "rb");
+    if(archComp != NULL)
+    {
+        while(fread(&comp, sizeof(tCompra), 1, archComp) == 1)
+        {
+            if(strcmp(comp.IdEvento, idEvento) == 0)
+            {
+                pEntrada = comp.Entradas;
+                for(i = 0; i < comp.cantEntradas; i++)
+                {
+                    if(strcmp(pEntrada->estado, "CANCELADA") == 0)
+                    {
+                        entradasCanceladas++;
+                    }
+                    else
+                    {
+                        entradasVendidas++;
+                        recaudacionVigente += pEntrada->precio;
+                    }
+                    pEntrada++;
+                }
+            }
+        }
+        fclose(archComp);
+    }
+
+    printf("\n--- REPORTE DE VENTAS: %s (%s) ---\n", eve.nombre, eve.id);
+    printf("  Cantidad de entradas vendidas vigentes : %d\n", entradasVendidas);
+    printf("  Cantidad de entradas canceladas        : %d\n", entradasCanceladas);
+    printf("  Recaudacion total vigente              : $%.2f\n", recaudacionVigente);
+    printf("----------------------------------------------------\n\n");
+    pausar();
+}
+
+
+
+
+void busquedaEficienteEvento(void)
+{
+    int opcion;
+    char idBuscado[50];
+    FILE *archEve;
+    int inicio, fin, medio;
+    int totalRegistros;
+    tEvento eve;
+    int encontrado;
+    char strFecha[15];
+    char strHora[10];
+    char nombreEst[30];
+
+    encontrado = 0;
+
+    limpiarPantalla();
+    printf("====================================================\n");
+    printf("             BUSQUEDA EFICIENTE DE EVENTOS          \n");
+    printf("====================================================\n");
+    printf("1. Buscar evento por ID\n");
+    printf("2. Consultar eventos de un estadio/teatro\n");
+    printf("Opcion: ");
+    if(scanf("%d", &opcion) != 1)
+    {
+        vaciarBufferTeclado();
+        pausar();
+        return;
+    }
+    vaciarBufferTeclado();
+
+    if(opcion == 1)
+    {
+        printf("Ingrese el ID del evento: ");
+        if(scanf("%49s", idBuscado) != 1)
+        {
+            vaciarBufferTeclado();
+            pausar();
+            return;
+        }
+        vaciarBufferTeclado();
+
+        archEve = fopen("Eventos.bin", "rb");
+        if(archEve == NULL)
+        {
+            printf("No existen eventos registrados.\n");
+            pausar();
+            return;
+        }
+
+        fseek(archEve, 0, SEEK_END);
+        totalRegistros = (int)(ftell(archEve) / sizeof(tEvento));
+
+        inicio = 0;
+        fin = totalRegistros - 1;
+
+        while(inicio <= fin && !encontrado)
+        {
+            int cmp;
+            medio = inicio + (fin - inicio) / 2;
+            fseek(archEve, medio * sizeof(tEvento), SEEK_SET);
+            fread(&eve, sizeof(tEvento), 1, archEve);
+
+            cmp = strcmp(eve.id, idBuscado);
+            if(cmp == 0)
+            {
+                encontrado = 1;
+            }
+            else if(cmp < 0)
+            {
+                inicio = medio + 1;
+            }
+            else
+            {
+                fin = medio - 1;
+            }
+        }
+        fclose(archEve);
+
+        if(encontrado)
+        {
+            buscarNombreEstablecimiento(eve.idEstablecimiento, nombreEst);
+            formatearFecha(eve.fechaHora, strFecha);
+            formatearHora(eve.fechaHora, strHora);
+
+            printf("\n--- EVENTO ENCONTRADO ---\n");
+            printf("ID              : %s\n", eve.id);
+            printf("Nombre          : %s\n", eve.nombre);
+            printf("Tipo            : %s\n", eve.tipoEvento);
+            printf("Fecha           : %s\n", strFecha);
+            printf("Hora            : %s\n", strHora);
+            printf("Establecimiento : %s\n", nombreEst);
+            printf("Estado          : %d\n", eve.estado);
+        }
+        else
+        {
+            printf("No se encontro ningun evento con ID '%s'.\n", idBuscado);
+        }
+    }
+    else if(opcion == 2)
+    {
+        unsigned idEst;
+        int hay;
+        hay = 0;
+
+        printf("Ingrese el ID del establecimiento: ");
+        if(scanf("%u", &idEst) != 1)
+        {
+            vaciarBufferTeclado();
+            pausar();
+            return;
+        }
+        vaciarBufferTeclado();
+
+        archEve = fopen("Eventos.bin", "rb");
+        if(archEve != NULL)
+        {
+            printf("\nEventos para el establecimiento ID %u:\n", idEst);
+            while(fread(&eve, sizeof(tEvento), 1, archEve) == 1)
+            {
+                if(eve.idEstablecimiento == idEst)
+                {
+                    formatearFecha(eve.fechaHora, strFecha);
+                    formatearHora(eve.fechaHora, strHora);
+                    printf(" - [%s] %s | %s %s (Estado: %d)\n", eve.id, eve.nombre, strFecha, strHora, eve.estado);
+                    hay = 1;
+                }
+            }
+            fclose(archEve);
+        }
+        if(!hay)
+            printf("No hay eventos programados para ese establecimiento.\n");
+    }
+
+    printf("\n");
+    pausar();
+}
+
+
+
+
+int criterioVendidas(const tEntrada *e)
+{
+    return (strcmp(e->estado, "CANCELADA") != 0);
+}
+
+int criterioCanceladas(const tEntrada *e)
+{
+    return (strcmp(e->estado, "CANCELADA") == 0);
+}
+
+int contarEntradas(const char *idEvento, int (*criterio)(const tEntrada*))
+{
+    FILE *archComp;
+    tCompra comp;
+    int cant;
+    int i;
+    const tEntrada *pEntrada;
+
+    cant = 0;
+    archComp = fopen("Compras.bin", "rb");
+    if(archComp == NULL)
+        return 0;
+
+    while(fread(&comp, sizeof(tCompra), 1, archComp) == 1)
+    {
+        if(strcmp(comp.IdEvento, idEvento) == 0)
+        {
+            pEntrada = comp.Entradas;
+            for(i = 0; i < comp.cantEntradas; i++)
+            {
+                if(criterio(pEntrada))
+                    cant++;
+                pEntrada++;
+            }
+        }
+    }
+
+    fclose(archComp);
+    return cant;
+}
+
+void conteoEntradasCriterio(void)
+{
+    char idEvento[50];
+    tEvento eve;
+    int v, c;
+
+    limpiarPantalla();
+    printf("====================================================\n");
+    printf("               CONTEO DE ENTRADAS                   \n");
+    printf("====================================================\n");
+
+    printf("Ingrese el ID del evento: ");
+    if(scanf("%49s", idEvento) != 1)
+    {
+        vaciarBufferTeclado();
+        pausar();
+        return;
+    }
+    vaciarBufferTeclado();
+
+    if(!obtenerEventoPorId(idEvento, &eve))
+    {
+        printf("ERROR: No se encontro el evento con ID '%s'.\n", idEvento);
+        pausar();
+        return;
+    }
+
+    v = contarEntradas(idEvento, criterioVendidas);
+    c = contarEntradas(idEvento, criterioCanceladas);
+
+    printf("\n--- RESULTADOS DEL CONTEO: %s ---\n", eve.nombre);
+    printf("  Entradas Vendidas  : %d\n", v);
+    printf("  Entradas Canceladas: %d\n", c);
+    printf("  Total emitidas     : %d\n\n", v + c);
+    pausar();
+}
+
+
+
+
+void reporteOcupacionEvento(void)
+{
+    char idEvento[50];
+    tEvento eve;
+    tEstablecimiento *est;
+    int capTotal;
+    int ocupadas;
+    int disponibles;
+    float porcentaje;
+    int s, f, c;
+    const tSector *pSector;
+
+    capTotal = 0;
+    ocupadas = 0;
+    disponibles = 0;
+    porcentaje = 0.0f;
+
+    limpiarPantalla();
+    printf("====================================================\n");
+    printf("                REPORTE DE OCUPACION                \n");
+    printf("====================================================\n");
+
+    printf("Ingrese el ID del evento: ");
+    if(scanf("%49s", idEvento) != 1)
+    {
+        vaciarBufferTeclado();
+        pausar();
+        return;
+    }
+    vaciarBufferTeclado();
+
+    if(!obtenerEventoPorId(idEvento, &eve))
+    {
+        printf("ERROR: No se encontro el evento con ID '%s'.\n", idEvento);
+        pausar();
+        return;
+    }
+
+    est = (tEstablecimiento*)malloc(sizeof(tEstablecimiento));
+    if(est == NULL)
+    {
+        printf("ERROR: Memoria insuficiente.\n");
+        pausar();
+        return;
+    }
+
+    if(!obtenerEstablecimientoPorId(eve.idEstablecimiento, est))
+    {
+        printf("ERROR: No se encontro el establecimiento asociado.\n");
+        free(est);
+        pausar();
+        return;
+    }
+
+    pSector = est->sectores;
+    for(s = 0; s < MAX_SECTORES; s++)
+    {
+        if(pSector->id != 0 || pSector->capacidad > 0)
+        {
+            int fMax = pSector->filas;
+            int cMax = pSector->columnas;
+
+            for(f = 1; f <= fMax; f++)
+            {
+                for(c = 1; c <= cMax; c++)
+                {
+                    capTotal++;
+                    if(estaUbicacionOcupadaPorEvento(eve.id, pSector->id, f, c))
+                        ocupadas++;
+                    else
+                        disponibles++;
+                }
+            }
+        }
+        pSector++;
+    }
+
+    if(capTotal > 0)
+        porcentaje = ((float)ocupadas / (float)capTotal) * 100.0f;
+
+    printf("\n--- ESTADISTICAS DE OCUPACION: %s (%s) ---\n", eve.nombre, eve.id);
+    printf("  Capacidad total efectiva : %d butacas\n", capTotal);
+    printf("  Ubicaciones ocupadas     : %d\n", ocupadas);
+    printf("  Ubicaciones disponibles  : %d\n", disponibles);
+    printf("  Porcentaje de ocupacion  : %.2f%%\n", porcentaje);
+    printf("----------------------------------------------------\n\n");
+
+    free(est);
     pausar();
 }

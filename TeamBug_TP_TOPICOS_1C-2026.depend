@@ -59,19 +59,24 @@
 	"usuario.h"
 	"util.h"
 
-1792603203 source:c:\users\nikkito\documents\tp_gestion_eventos_c\compra.c
+1792956536 source:c:\users\nikkito\documents\tp_gestion_eventos_c\compra.c
 	"estructuras.h"
 	"compra.h"
+	"evento.h"
+	"fecha.h"
+	"util.h"
+	"ubicacion.h"
+	"establecimiento.h"
 
 1792603203 c:\users\nikkito\documents\tp_gestion_eventos_c\estructuras.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1792603203 c:\users\nikkito\documents\tp_gestion_eventos_c\compra.h
+1792955221 c:\users\nikkito\documents\tp_gestion_eventos_c\compra.h
 	"estructuras.h"
 
-1792608903 source:c:\users\nikkito\documents\tp_gestion_eventos_c\establecimiento.c
+1792956072 source:c:\users\nikkito\documents\tp_gestion_eventos_c\establecimiento.c
 	"estructuras.h"
 	"establecimiento.h"
 	"evento.h"
@@ -87,23 +92,26 @@
 
 1792604877 c:\users\nikkito\documents\tp_gestion_eventos_c\usuario.h
 
-1792608963 source:c:\users\nikkito\documents\tp_gestion_eventos_c\usuario.c
+1792955936 source:c:\users\nikkito\documents\tp_gestion_eventos_c\usuario.c
 	"usuario.h"
 	"estructuras.h"
 	"evento.h"
 	"establecimiento.h"
 	"ubicacion.h"
 	"util.h"
+	"compra.h"
 
-1792608835 c:\users\nikkito\documents\tp_gestion_eventos_c\evento.h
+1792955833 c:\users\nikkito\documents\tp_gestion_eventos_c\evento.h
 	"estructuras.h"
 
-1792608879 source:c:\users\nikkito\documents\tp_gestion_eventos_c\evento.c
+1792956087 source:c:\users\nikkito\documents\tp_gestion_eventos_c\evento.c
+	"ubicacion.h"
 	"estructuras.h"
 	"evento.h"
 	"establecimiento.h"
 	"fecha.h"
 	"util.h"
+	"compra.h"
 
 1792605288 c:\users\nikkito\documents\tp_gestion_eventos_c\fecha.h
 	<stdio.h>
@@ -115,7 +123,7 @@
 
 1792608818 c:\users\nikkito\documents\tp_gestion_eventos_c\util.h
 
-1792608931 source:c:\users\nikkito\documents\tp_gestion_eventos_c\ubicacion.c
+1792956079 source:c:\users\nikkito\documents\tp_gestion_eventos_c\ubicacion.c
 	"ubicacion.h"
 	"evento.h"
 	"establecimiento.h"
@@ -124,8 +132,9 @@
 1792608051 c:\users\nikkito\documents\tp_gestion_eventos_c\ubicacion.h
 	"estructuras.h"
 
-1792608825 source:c:\users\nikkito\documents\tp_gestion_eventos_c\util.c
+1792609367 source:c:\users\nikkito\documents\tp_gestion_eventos_c\util.c
 	<stdio.h>
+	<stdlib.h>
 	"util.h"
 
 1792765188 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\fecha.h

@@ -122,7 +122,7 @@ void consultarEstablecimiento(void)
     pSector = est.sectores;
     pFinSector = est.sectores + MAX_SECTORES;
 
-    /* Recorrido con aritmetica de punteros segun context.md */
+    
     while(pSector < pFinSector)
     {
         if(pSector->id != 0 || pSector->capacidad > 0)

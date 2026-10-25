@@ -85,6 +85,8 @@ void consultarUbicacionesYDisponibilidad(void)
     tEstablecimiento *est;
     unsigned idSector;
     const tSector *sectorElegido = NULL;
+    const tSector *pSector;
+    const tSector *pFinSector;
     int i;
     int cantAValidar;
     int filaIngresada, butacaIngresada;
@@ -111,7 +113,7 @@ void consultarUbicacionesYDisponibilidad(void)
         return;
     }
 
-    /* Asignamos memoria dinamica en el Heap para tEstablecimiento para cuidar el stack */
+    
     est = (tEstablecimiento*)malloc(sizeof(tEstablecimiento));
     if(est == NULL)
     {
@@ -131,14 +133,17 @@ void consultarUbicacionesYDisponibilidad(void)
     printf("\nEvento: %s (%s) en %s\n", eve.nombre, eve.id, est->nombre);
     printf("----------------------------------------------------\n");
     printf("Sectores disponibles:\n");
-    for(i = 0; i < MAX_SECTORES; i++)
+    pSector = est->sectores;
+    pFinSector = est->sectores + MAX_SECTORES;
+    while(pSector < pFinSector)
     {
-        if(est->sectores[i].id != 0 || est->sectores[i].capacidad > 0)
+        if(pSector->id != 0 || pSector->capacidad > 0)
         {
             printf(" - ID: %u | Nombre: %-15s | Precio: $%.2f | (%d filas x %d butacas)\n",
-                   est->sectores[i].id, est->sectores[i].nombre, est->sectores[i].precio,
-                   est->sectores[i].filas, est->sectores[i].columnas);
+                   pSector->id, pSector->nombre, pSector->precio,
+                   pSector->filas, pSector->columnas);
         }
+        pSector++;
     }
     printf("----------------------------------------------------\n");
 
@@ -153,13 +158,14 @@ void consultarUbicacionesYDisponibilidad(void)
     }
     vaciarBufferTeclado();
 
-    for(i = 0; i < MAX_SECTORES; i++)
+    pSector = est->sectores;
+    while(pSector < pFinSector && sectorElegido == NULL)
     {
-        if(est->sectores[i].id == idSector)
+        if(pSector->id == idSector)
         {
-            sectorElegido = &est->sectores[i];
-            break;
+            sectorElegido = pSector;
         }
+        pSector++;
     }
 
     if(sectorElegido == NULL)
@@ -170,10 +176,10 @@ void consultarUbicacionesYDisponibilidad(void)
         return;
     }
 
-    /* Mostrar matriz de butacas con simpleza */
+    
     mostrarMatrizUbicaciones(eve.id, sectorElegido);
 
-    /* Validar seleccion de una o mas ubicaciones segun consigna */
+    
     printf("Desea verificar la disponibilidad de ubicaciones? (1: Si / 0: No): ");
     if(scanf("%d", &cantAValidar) == 1 && cantAValidar == 1)
     {
