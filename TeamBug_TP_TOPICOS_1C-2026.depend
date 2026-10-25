@@ -6,44 +6,57 @@
 	<stdio.h>
 	<stdlib.h>
 
-1792076385 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\compra.c
+1792798474 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\compra.c
 	"estructuras.h"
 	"compra.h"
+	"evento.h"
+	"fecha.h"
+	"util.h"
+	"ubicacion.h"
+	"establecimiento.h"
 
 1792178312 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\estructuras.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1792076401 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\compra.h
+1792798534 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\compra.h
 	"estructuras.h"
 
-1792534313 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.c
+1792765583 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.c
 	"estructuras.h"
 	"establecimiento.h"
+	"evento.h"
+	"util.h"
 
-1792531732 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.h
+1792765188 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\establecimiento.h
 	"estructuras.h"
 
-1792535238 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.c
+1792765188 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.c
 	"estructuras.h"
 	"evento.h"
 	"establecimiento.h"
+	"fecha.h"
+	"util.h"
 
-1792192262 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.h
+1792765188 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\evento.h
 	"estructuras.h"
 
-1792192262 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.c
+1792798041 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.c
 	"usuario.h"
 	"estructuras.h"
 	"evento.h"
+	"establecimiento.h"
+	"ubicacion.h"
+	"util.h"
+	"compra.h"
 
-1792192262 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.h
-	"estructuras.h"
+1792765188 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\usuario.h
 
-1792192262 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\main.c
+1792765188 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\main.c
 	"estructuras.h"
 	"usuario.h"
+	"util.h"
 
 1792603203 source:c:\users\nikkito\documents\tp_gestion_eventos_c\compra.c
 	"estructuras.h"
@@ -112,5 +125,29 @@
 
 1792608825 source:c:\users\nikkito\documents\tp_gestion_eventos_c\util.c
 	<stdio.h>
+	"util.h"
+
+1792765188 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\fecha.h
+	<stdio.h>
+	<time.h>
+
+1792765188 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\util.h
+
+1792765188 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\fecha.c
+	"fecha.h"
+	<ctype.h>
+
+1792765188 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\ubicacion.c
+	"ubicacion.h"
+	"evento.h"
+	"establecimiento.h"
+	"util.h"
+
+1792765188 c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\ubicacion.h
+	"estructuras.h"
+
+1792765188 source:c:\users\bore elias\onedrive\escritorio\yo\topicos\2c-2026\tp_gestion_eventos_c\util.c
+	<stdio.h>
+	<stdlib.h>
 	"util.h"
 

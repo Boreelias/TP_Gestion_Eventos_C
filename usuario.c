@@ -4,6 +4,7 @@
 #include "establecimiento.h"
 #include "ubicacion.h"
 #include "util.h"
+#include "compra.h"
 
 int iniciarSistema(int *perfil, char *idUsuario)
 {
@@ -85,6 +86,9 @@ void ejecutarMenuUsuario(const char *idUser)
         printf("1. Consultar eventos disponibles.\n");
         printf("2. Consultar establecimiento de un evento.\n");
         printf("3. Consultar ubicaciones y disponibilidad de un sector.\n");
+        printf("4. Comprar entradas.\n");
+        printf("5. Consultar entradas.\n");
+        printf("6. Cancelar entradas.\n");
         printf("0. Cerrar sesion.\n");
         printf("--------------------------------------------------\n");
         printf("Opcion: ");
@@ -108,6 +112,14 @@ void ejecutarMenuUsuario(const char *idUser)
             case 3:
                 consultarUbicacionesYDisponibilidad();
                 break;
+            case 4:
+                procesarCompraEntradas(idUser);
+                break;
+            case 5:
+                consultarEntradasUsuario(idUser);
+                break;
+            case 6:
+                cancelarEntradasUsuario(idUser);
             case 0:
                 printf("\nCerrando sesion...\n");
                 break;
