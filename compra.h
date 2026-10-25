@@ -11,5 +11,6 @@ int guardarCompraYEntradas(const tCompra *nuevaCompra);
 void procesarCompraEntradas(const char *idUsuario);
 void consultarEntradasUsuario(const char *idUsuario);
 void cancelarEntradasUsuario(const char *idUsuario);
+void actualizarEntradasDeEvento(const char *idEvento, int nuevoEstado);
 
 #endif // COMPRA_H_INCLUDED

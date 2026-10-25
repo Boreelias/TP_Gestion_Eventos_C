@@ -3,6 +3,7 @@
 #include "establecimiento.h"
 #include "fecha.h"
 #include "util.h"
+#include "compra.h"
 
 int existeEvento(const char *idBuscado)
 {
@@ -64,7 +65,6 @@ int insertarEventoOrdenado(const tEvento *nuevo)
 
     if(archOrig == NULL)
     {
-        /* Si el archivo original no existe, simplemente escribimos el nuevo */
         if(fwrite(nuevo, sizeof(tEvento), 1, archTemp) != 1)
         {
             fclose(archTemp);
@@ -76,7 +76,6 @@ int insertarEventoOrdenado(const tEvento *nuevo)
         return 1;
     }
 
-    /* Intercalacion ordenada por ID */
     while(fread(&actual, sizeof(tEvento), 1, archOrig) == 1)
     {
         if(!insertado && strcmp(nuevo->id, actual.id) < 0)
@@ -164,7 +163,6 @@ void altaEvento(void)
     printf("                  REGISTRAR EVENTO                  \n");
     printf("====================================================\n");
 
-    /* 1. Ingreso y validacion de ID (maximo 9 caracteres + '\0') */
     printf("Ingrese el ID del evento (max 9 caracteres): ");
     if(scanf("%49s", idTemp) != 1)
     {
@@ -190,7 +188,6 @@ void altaEvento(void)
     }
     strcpy(eve.id, idTemp);
 
-    /* 2. Ingreso de Nombre */
     printf("Ingrese el nombre del evento (max 29 caracteres): ");
     if(scanf(" %29[^\n]", nomTemp) != 1)
     {
@@ -202,7 +199,6 @@ void altaEvento(void)
     vaciarBufferTeclado();
     strcpy(eve.nombre, nomTemp);
 
-    /* 3. Ingreso de Tipo de Evento */
     printf("Ingrese el tipo de evento (recital, teatro, etc. max 29 caracteres): ");
     if(scanf(" %29[^\n]", tipoTemp) != 1)
     {
@@ -214,7 +210,6 @@ void altaEvento(void)
     vaciarBufferTeclado();
     strcpy(eve.tipoEvento, tipoTemp);
 
-    /* 4. Ingreso de Establecimiento */
     printf("Ingrese el ID del establecimiento: ");
     if(scanf("%u", &eve.idEstablecimiento) != 1)
     {
@@ -233,7 +228,6 @@ void altaEvento(void)
         return;
     }
 
-    /* 5. Ingreso y validacion de Fecha y Hora tolerante a formatos */
     printf("Ingrese la fecha (ej: DD/MM/AAAA o DDMMAAAA): ");
     if(scanf("%49s", fechaStr) != 1)
     {
@@ -277,10 +271,8 @@ void altaEvento(void)
 
     eve.fechaHora = convertirFechaATimestamp(dia, mes, anio, hora, min);
 
-    /* 6. Estado inicial: 1 = Disponible por defecto */
     eve.estado = 1;
 
-    /* 7. Insercion ordenada por ID en el archivo */
     if(insertarEventoOrdenado(&eve))
     {
         printf("\n====================================================\n");
@@ -292,5 +284,101 @@ void altaEvento(void)
         printf("ERROR: No se pudo guardar el evento en el archivo.\n");
     }
 
+    pausar();
+}
+
+int buscarEvento(FILE *archEve, const char *idBuscado, tEvento *eve)
+{
+    rewind(archEve);
+    while(fread(eve, sizeof(tEvento), 1, archEve) == 1)
+    {
+        if(strcmp(eve->id, idBuscado) == 0)
+        {
+            fseek(archEve, -(long)sizeof(tEvento), SEEK_CUR);
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int pedirNuevoEstado(void)
+{
+    int nuevoEstado;
+
+    printf("\nSeleccione el nuevo estado:\n");
+    printf("1. Disponible\n");
+    printf("2. Cancelado\n");
+    printf("3. Finalizado\n");
+    printf("Opcion: ");
+
+    if(scanf("%d", &nuevoEstado) != 1 || nuevoEstado < 1 || nuevoEstado > 3)
+    {
+        vaciarBufferTeclado();
+    }
+    vaciarBufferTeclado();
+    return nuevoEstado;
+}
+
+void modificarEstadoEvento(void)
+{
+    char idBuscado[50];
+    tEvento eve;
+    FILE *archEve;
+    int nuevoEstado;
+
+    limpiarPantalla();
+    printf("====================================================\n");
+    printf("             GESTION DE ESTADO DE EVENTOS           \n");
+    printf("====================================================\n");
+
+    printf("Ingrese el ID del evento a modificar: ");
+    if(scanf("%49s", idBuscado) != 1)
+    {
+        vaciarBufferTeclado();
+        printf("Error en la lectura del ID.\n");
+        pausar();
+        return;
+    }
+    vaciarBufferTeclado();
+
+    archEve = fopen("Eventos.bin", "r+b");
+    if(archEve == NULL)
+    {
+        printf("ERROR: No se pudo abrir el archivo de eventos.\n");
+        pausar();
+        return;
+    }
+
+    if(!buscarEvento(archEve, idBuscado, &eve))
+    {
+        printf("ERROR: No se encontro el evento con ID '%s'.\n", idBuscado);
+        fclose(archEve);
+        pausar();
+        return;
+    }
+
+    printf("\nEvento Encontrado : %s (%s)\n", eve.nombre, eve.id);
+    printf("Estado Actual     : %d (1: Disponible, 2: Cancelado, 3: Finalizado)\n", eve.estado);
+    printf("----------------------------------------------------\n");
+
+    nuevoEstado = pedirNuevoEstado();
+    if(nuevoEstado == 0)
+    {
+        printf("ERROR: Opcion de estado invalida.\n");
+        fclose(archEve);
+        pausar();
+        return;
+    }
+
+    eve.estado = nuevoEstado;
+    fwrite(&eve, sizeof(tEvento), 1, archEve);
+    fclose(archEve);
+
+    if(nuevoEstado == 2 || nuevoEstado == 3)
+    {
+        actualizarEntradasDeEvento(eve.id, nuevoEstado);
+    }
+
+    printf("\n¡ESTADO DEL EVENTO ACTUALIZADO EXITOSAMENTE!\n");
     pausar();
 }

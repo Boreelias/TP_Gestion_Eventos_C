@@ -170,7 +170,7 @@ int cargarUbicacionesCompra(tCompra *nuevaCompra, const tEvento *eve, const tSec
 
             if(butacaDuplicada)
             {
-                printf(">> ERROR: Ya seleccionaste esta ubicacion en la presente compra.\n");
+                printf("ERROR: Ya seleccionaste esta ubicacion en la presente compra.\n");
                 compraValida = 0;
             }
             else
@@ -631,4 +631,53 @@ void cancelarEntradasUsuario(const char *idUsuario)
     }
 
     pausar();
+}
+
+void actualizarEntradasDeEvento(const char *idEvento, int nuevoEstado)
+{
+    FILE *archEnt;
+    FILE *archComp;
+    tEntrada entrada;
+    tCompra compra;
+    const char *estadoNuevo;
+    int compraEncontrada;
+
+    archEnt = fopen("Entradas.bin", "r+b");
+    if(archEnt == NULL)
+        return;
+
+    archComp = fopen("Compras.bin", "rb");
+    if(archComp == NULL)
+    {
+        fclose(archEnt);
+        return;
+    }
+
+    estadoNuevo = (nuevoEstado == 2) ? "CANCELADA" : "FINALIZADA";
+
+    while(fread(&entrada, sizeof(tEntrada), 1, archEnt) == 1)
+    {
+        if(strcmp(entrada.estado, "VIGENTE") == 0)
+        {
+            rewind(archComp);
+            compraEncontrada = 0;
+
+            while(!compraEncontrada && fread(&compra, sizeof(tCompra), 1, archComp) == 1)
+            {
+                if(strcmp(compra.id, entrada.idCompra) == 0)
+                    compraEncontrada = 1;
+            }
+
+            if(compraEncontrada && strcmp(compra.IdEvento, idEvento) == 0)
+            {
+                strcpy(entrada.estado, estadoNuevo);
+                fseek(archEnt, -(long)sizeof(tEntrada), SEEK_CUR);
+                fwrite(&entrada, sizeof(tEntrada), 1, archEnt);
+                fseek(archEnt, 0L, SEEK_CUR);
+            }
+        }
+    }
+
+    fclose(archComp);
+    fclose(archEnt);
 }

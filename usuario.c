@@ -141,6 +141,7 @@ void ejecutarMenuAdministrador(void)
         printf("==================================================\n");
         printf("1. Registrar nuevo evento (Alta).\n");
         printf("2. Consultar establecimiento de un evento.\n");
+        printf("3. Modificar estado del evento.\n");
         printf("0. Cerrar sesion.\n");
         printf("--------------------------------------------------\n");
         printf("Opcion: ");
@@ -161,6 +162,8 @@ void ejecutarMenuAdministrador(void)
             case 2:
                 consultarEstablecimiento();
                 break;
+            case 3:
+                modificarEstadoEvento();
             case 0:
                 printf("\nCerrando sesion...\n");
                 break;
